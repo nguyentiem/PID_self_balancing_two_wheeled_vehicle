@@ -223,13 +223,13 @@ float err = 0;
 float preError = 0;
 
 #define thread_Hold 30.0
-float const Kp = 60.0;
-float const Ki = 0.001;
-float const Kd = 9.0;
+float const Kp = 25.0;
+float const Ki = 250;
+float const Kd = 1.01;
 float const TARGET = 0.0;
 PIDController PID;
 
-int base = 0;
+int base = 30;
 
 int stateMachine = 0;
 
@@ -255,13 +255,13 @@ float PID_Compute(PIDController *pid, float setpoint, float measured_value, floa
 
   // Thành phần tích phân
   pid->integral += error * delta_t;
-  if ( pid->integral > 100) {
-    pid->integral = 100;
-  }
-
-  if ( pid->integral < -100) {
-    pid->integral = -100;
-  }
+//  if ( pid->integral > 100) {
+//    pid->integral = 100;
+//  }
+//
+//  if ( pid->integral < -100) {
+//    pid->integral = -100;
+//  }
 
   float I = pid->Ki * pid->integral;
   //  if(I> 30){
@@ -274,12 +274,12 @@ float PID_Compute(PIDController *pid, float setpoint, float measured_value, floa
   // Cập nhật sai số trước
   pid->prev_error = error;
  Serial.print(P);
-  Serial.print(",");
+  Serial.print(", ");
   Serial.print(I);
-  Serial.print(",");
+  Serial.print(", ");
 
   Serial.print(D);
-  Serial.print(",");
+  Serial.print(",         ");
   
   // Tín hiệu điều khiển
   return P + I + D;
@@ -430,7 +430,7 @@ void loop() {
       Serial.print(",");
       Serial.print(result);
       Serial.print(",");
-      Serial.println(base + result);
+      Serial.println(base + abs(result));
       break;
     case 2: // stop
       left_dung();
